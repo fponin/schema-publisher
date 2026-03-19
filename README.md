@@ -1,0 +1,95 @@
+# hpub — GraphQL subgraph schema publisher
+
+CLI-инструмент для публикации схем GraphQL-подграфов в [GraphQL Hive](https://the-guild.dev/graphql/hive).
+
+Автоматизирует полный цикл: интроспекция схемы → проверка совместимости → публикация.
+
+## Как работает
+
+**Полный пайплайн** (схема берётся из кластера):
+```
+kubectl port-forward → Rover introspect → Hive schema:check → Hive schema:publish
+```
+
+**Режим schema-only** (есть готовый файл схемы):
+```
+Hive schema:check → Hive schema:publish
+```
+
+## Установка
+
+### Зависимости
+
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [rover](https://rover.apollo.dev) — Apollo Rover CLI
+- [hive CLI](https://the-guild.dev/graphql/hive/docs/api-reference/cli) v0.42.1
+
+```bash
+npm install -g @graphql-hive/cli@0.42.1
+```
+
+### Установка бинарника
+
+```bash
+sudo cp hpub /usr/local/bin/ && sudo chmod +x /usr/local/bin/hpub
+```
+
+### Первоначальная настройка
+
+```bash
+hpub config init
+```
+
+Создаёт конфиг `~/.config/hpub/config.yaml` с преднастроенными окружениями и подграфами.
+При первом запуске `hpub run` будет предложено ввести Hive access token.
+
+## Использование
+
+```bash
+hpub run                             # интерактивный визард
+hpub run --env dev                   # пропустить выбор окружения
+hpub run --schema ./schema.graphql   # использовать готовый файл схемы
+hpub check --schema ./schema.graphql # только проверить, без публикации
+hpub config show                     # показать текущий конфиг
+hpub config edit                     # открыть конфиг в $EDITOR
+```
+
+## Конфигурация
+
+Конфиг живёт в `~/.config/hpub/config.yaml`. Структура:
+
+```yaml
+defaults:
+  schemaFile: "~/new.graphql"   # дефолтный путь к файлу схемы
+  hiveEndpoint: "https://..."   # endpoint Hive registry
+
+environments:
+  dev:
+    authUrl: "..."
+    authBearerToken: "..."
+    defaultLocalPort: 8080
+    jwtHeader: "jwt-token"
+    kubectlContext: ""          # заполняется при первом запуске
+    hiveEndpoint: ""            # заполняется при первом запуске
+    hiveAccessToken: ""         # заполняется при первом запуске
+  stage: { ... }
+  prod: { ... }
+
+subgraphs:
+  - name: my-service
+    publishUrl: "http://my-service:8080/graphql"
+    k8sResource: "svc/my-service"
+    namespace: my-namespace
+    remotePort: 8080
+    graphqlPath: "/graphql"
+```
+
+## Сборка
+
+```bash
+make build    # собрать бинарник ./hpub
+make install  # собрать + установить в /usr/local/bin/hpub
+make test     # запустить тесты
+make lint     # go vet
+make package  # собрать дистрибутив в dist/ (бинарник + defaults.yaml)
+```
