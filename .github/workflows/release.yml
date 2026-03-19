@@ -21,8 +21,10 @@ jobs:
       - name: Build
         run: |
           mkdir -p dist
-          GOOS=darwin GOARCH=amd64 go build -ldflags "-X github.com/fponin/hpub/cmd.Version=${{ github.ref_name }}" -o dist/hpub-darwin-amd64 .
-          GOOS=darwin GOARCH=arm64 go build -ldflags "-X github.com/fponin/hpub/cmd.Version=${{ github.ref_name }}" -o dist/hpub-darwin-arm64 .
+          GOOS=darwin  GOARCH=amd64 go build -ldflags "-X github.com/fponin/hpub/cmd.Version=${{ github.ref_name }}" -o dist/hpub-darwin-amd64 .
+          GOOS=darwin  GOARCH=arm64 go build -ldflags "-X github.com/fponin/hpub/cmd.Version=${{ github.ref_name }}" -o dist/hpub-darwin-arm64 .
+          GOOS=windows GOARCH=amd64 go build -ldflags "-X github.com/fponin/hpub/cmd.Version=${{ github.ref_name }}" -o dist/hpub-windows-amd64.exe .
+          GOOS=linux   GOARCH=amd64 go build -ldflags "-X github.com/fponin/hpub/cmd.Version=${{ github.ref_name }}" -o dist/hpub-linux-amd64 .
 
       - name: Generate defaults.yaml
         run: |
@@ -85,4 +87,6 @@ jobs:
           files: |
             dist/hpub-darwin-amd64
             dist/hpub-darwin-arm64
+            dist/hpub-windows-amd64.exe
+            dist/hpub-linux-amd64
             dist/defaults.yaml
