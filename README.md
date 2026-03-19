@@ -18,6 +18,18 @@ Hive schema:check → Hive schema:publish
 
 ## Установка
 
+### Скачать бинарник
+
+На странице [Releases](https://github.com/fponin/schema-publisher/releases/latest) скачай два файла под свою платформу:
+
+| Файл | Платформа |
+|------|-----------|
+| `hpub-darwin-arm64` | macOS Apple Silicon |
+| `hpub-darwin-amd64` | macOS Intel |
+| `hpub-windows-amd64.exe` | Windows |
+| `hpub-linux-amd64` | Linux |
+| `defaults.yaml` | шаблон конфигурации (нужен всем) |
+
 ### Зависимости
 
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
@@ -30,9 +42,16 @@ npm install -g @graphql-hive/cli@0.42.1
 
 ### Установка бинарника
 
+**macOS / Linux** — положи оба файла в одну папку и выполни:
+
 ```bash
+# переименуй бинарник в hpub
+mv hpub-darwin-arm64 hpub   # или hpub-darwin-amd64 / hpub-linux-amd64
+
 sudo cp hpub /usr/local/bin/ && sudo chmod +x /usr/local/bin/hpub
 ```
+
+**Windows** — переименуй `hpub-windows-amd64.exe` в `hpub.exe` и добавь в `PATH`.
 
 ### Первоначальная настройка
 
