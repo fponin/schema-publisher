@@ -42,7 +42,7 @@ npm install -g @graphql-hive/cli@0.42.1
 
 ### Установка бинарника
 
-**macOS / Linux** — положи оба файла в одну папку и выполни:
+**macOS / Linux:**
 
 ```bash
 # переименуй бинарник в hpub
@@ -53,14 +53,10 @@ sudo cp hpub /usr/local/bin/ && sudo chmod +x /usr/local/bin/hpub
 
 **Windows** — переименуй `hpub-windows-amd64.exe` в `hpub.exe` и добавь в `PATH`.
 
-### Первоначальная настройка
+Конфиг создаётся автоматически при первом запуске. Hive access token будет запрошен интерактивно.
 
-```bash
-hpub config init
-```
-
-Создаёт конфиг `~/.config/hpub/config.yaml` с преднастроенными окружениями и подграфами.
-При первом запуске `hpub run` будет предложено ввести Hive access token.
+> **Для администратора:** `defaults.yaml` из релиза — шаблон конфига с окружениями и подграфами.
+> Заполни и положи в `~/.config/hpub/config.yaml` перед распространением бинарника в команде.
 
 ## Использование
 
