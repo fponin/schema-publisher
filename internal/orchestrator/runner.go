@@ -90,7 +90,11 @@ func runCheck(ctx context.Context, input wizard.Input, profile config.EnvProfile
 		ui.StepFail(err.Error())
 		return PipelineResult{CheckResult: result, SchemaFile: schemaFile}, fmt.Errorf("check: %w", err)
 	}
-	ui.StepOK()
+	if result.OK {
+		ui.StepOK()
+	} else {
+		ui.StepWarn("найдены breaking changes")
+	}
 	return PipelineResult{CheckResult: result, SchemaFile: schemaFile}, nil
 }
 

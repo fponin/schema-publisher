@@ -216,7 +216,10 @@ func runRun(cmd *cobra.Command, _ []string) error {
 					return err
 				}
 				if !result.CheckResult.OK {
-					return nil
+					if !confirmPublishDespiteErrors() {
+						ui.Info("Публикация отменена.")
+						return nil
+					}
 				}
 			} else {
 				result, err := orchestrator.RunFull(ctx, input, profile, flagVerbose)
@@ -228,7 +231,10 @@ func runRun(cmd *cobra.Command, _ []string) error {
 				}
 				schemaFile = result.SchemaFile
 				if !result.CheckResult.OK {
-					return nil
+					if !confirmPublishDespiteErrors() {
+						ui.Info("Публикация отменена.")
+						return nil
+					}
 				}
 			}
 
@@ -241,6 +247,14 @@ func runRun(cmd *cobra.Command, _ []string) error {
 	}
 
 	return nil
+}
+
+func confirmPublishDespiteErrors() bool {
+	fmt.Println()
+	fmt.Print("  Опубликовать схему несмотря на ошибки проверки? (y/N): ")
+	var ans string
+	fmt.Scanln(&ans)
+	return ans == "y" || ans == "Y"
 }
 
 // handleInvalidToken checks if err is ErrInvalidToken, clears saved credentials,

@@ -68,9 +68,9 @@ func Check(ctx context.Context, creds HiveCreds, service, schemaFile string, ver
 	}
 
 	if err != nil {
-		if exitErr, ok := err.(*exec.ExitError); ok {
-			return CheckResult{OK: false, Output: combined},
-				fmt.Errorf("hive schema:check exited with code %d", exitErr.ExitCode())
+		if _, ok := err.(*exec.ExitError); ok {
+			// hive завершился с ненулевым кодом — нашёл проблемы, не упал
+			return CheckResult{OK: false, Output: combined}, nil
 		}
 		return CheckResult{OK: false, Output: combined}, fmt.Errorf("hive schema:check failed: %w", err)
 	}
