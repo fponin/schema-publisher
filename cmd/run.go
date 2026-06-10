@@ -251,7 +251,11 @@ func runRun(cmd *cobra.Command, _ []string) error {
 
 func confirmPublishDespiteErrors() bool {
 	fmt.Println()
-	fmt.Print("  Опубликовать схему несмотря на ошибки проверки? (y/N): ")
+	msg := "  Опубликовать схему несмотря на ошибки проверки? (y/N): "
+	if !flagNoColor {
+		msg = ui.StepFailStyle.Render(msg)
+	}
+	fmt.Print(msg)
 	var ans string
 	fmt.Scanln(&ans)
 	return ans == "y" || ans == "Y"
